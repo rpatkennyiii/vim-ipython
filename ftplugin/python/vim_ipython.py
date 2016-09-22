@@ -508,7 +508,7 @@ def with_subchannel(f,*args):
 
 @with_subchannel
 def run_this_file():
-    msg_id = send('%%run %s %s' % (run_flags, repr(vim.current.buffer.name),))
+    msg_id = send('%run '+run_flags+' '+vim.current.buffer.name.replace('\\','/'))
     print_prompt("In[]: %%run %s %s" % (run_flags, repr(vim.current.buffer.name)),msg_id)
 
 @with_subchannel
