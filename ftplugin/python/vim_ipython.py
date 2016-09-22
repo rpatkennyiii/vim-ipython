@@ -83,7 +83,7 @@ same version of Python.
 """
 
 def new_ipy(s=''):
-    """Create a new IPython kernel (optionally with extra arguments)
+    """Create a new jupyter_client (optionally with extra arguments)
 
     XXX: Allow passing of profile information here
 
@@ -93,7 +93,7 @@ def new_ipy(s=''):
         new_ipy()
 
     """
-    from IPython.kernel import KernelManager
+    from jupyter_client import KernelManager
     km = KernelManager()
     km.start_kernel()
     return km_from_string(km.connection_file)
@@ -107,9 +107,9 @@ def km_from_string(s=''):
         import IPython
     except ImportError:
         raise ImportError("Could not find IPython. " + _install_instructions)
-    from IPython.config.loader import KeyValueConfigLoader
+    from traitlets.config.loader import KeyValueConfigLoader
     try:
-        from IPython.kernel import (
+        from jupyter_client import (
             KernelManager,
             find_connection_file,
         )
@@ -250,7 +250,7 @@ def get_doc_msg(msg_id):
         content = get_child_msg(msg_id)['content']
     except Empty:
         # timeout occurred
-        return ["no reply from IPython kernel"]
+        return ["no reply from jupyter_client"]
 
     if not content['found']:
         return b
@@ -334,7 +334,7 @@ def ipy_complete(base, current_line, pos):
         # and we also have problems with unicode in vim, hence the following:
         return matches
     except Empty:
-        echo("no reply from IPython kernel")
+        echo("no reply from jupyter_client")
         return ['']
 
 def vim_ipython_is_open():
@@ -491,7 +491,7 @@ def print_prompt(prompt,msg_id=None):
             count = child['content']['execution_count']
             echo("In[%d]: %s" %(count,prompt))
         except Empty:
-            echo("In[]: %s (no reply from IPython kernel)" % prompt)
+            echo("In[]: %s (no reply from jupyter_client)" % prompt)
     else:
         echo("In[]: %s" % prompt)
 
@@ -587,7 +587,7 @@ def set_pid():
     try:
         child = get_child_msg(msg_id)
     except Empty:
-        echo("no reply from IPython kernel")
+        echo("no reply from jupyter_client")
         return
     try:
         pid = int(child['content']['user_variables']['_pid'])
@@ -602,7 +602,7 @@ def set_pid():
 
 
 def terminate_kernel_hack():
-    "Send SIGTERM to our the IPython kernel"
+    "Send SIGTERM to our the jupyter_client"
     import signal
     interrupt_kernel_hack(signal.SIGTERM)
 
